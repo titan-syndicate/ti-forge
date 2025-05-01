@@ -37,6 +37,10 @@ func Clean() error {
 	if err := os.RemoveAll("bin"); err != nil {
 		return err
 	}
+	// Remove output directory
+	if err := os.RemoveAll("output"); err != nil {
+		return err
+	}
 	return nil
 }
 
@@ -47,36 +51,9 @@ func Install() error {
 	return sh.Run("cp", "bin/ti-scaffold", "/usr/local/bin/")
 }
 
-// Setup initializes the project
-func Setup() error {
-	fmt.Println("Setting up project...")
-
-	// Create bin directory if it doesn't exist
-	if err := os.MkdirAll("bin", 0755); err != nil {
-		return err
-	}
-
-	// Initialize go module if go.mod doesn't exist
-	if _, err := os.Stat("go.mod"); os.IsNotExist(err) {
-		if err := sh.Run("go", "mod", "init", "github.com/titan-syndicate/ti-scaffold"); err != nil {
-			return err
-		}
-	}
-
-	// Get required dependencies
-	deps := []string{
-		"github.com/hashicorp/go-plugin",
-		"github.com/titan-syndicate/titanium-plugin-api/pkg/pluginapi",
-		"google.golang.org/grpc",
-		"github.com/spf13/cobra",
-		"github.com/magefile/mage",
-	}
-
-	for _, dep := range deps {
-		if err := sh.Run("go", "get", dep); err != nil {
-			return err
-		}
-	}
-
-	return nil
+// Scaffold runs the scaffold command with test inputs
+func Scaffold() error {
+	mg.Deps(Build)
+	fmt.Println("Running scaffold command...")
+	return sh.Run("./bin/ti-scaffold", "--dev", "--config", "testdata/scaffold.yaml")
 }
