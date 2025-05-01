@@ -39,6 +39,11 @@ var rootCmd = &cobra.Command{
 		viper.AddConfigPath(".")
 		viper.AutomaticEnv()
 
+		// If config file is specified, use it
+		if configFile, _ := cmd.Flags().GetString("config"); configFile != "" {
+			viper.SetConfigFile(configFile)
+		}
+
 		// Bind flags
 		viper.BindPFlag("name", cmd.Flags().Lookup("name"))
 		viper.BindPFlag("package", cmd.Flags().Lookup("package"))
@@ -110,6 +115,7 @@ func init() {
 	rootCmd.PersistentFlags().BoolVar(&devMode, "dev", false, "Run in development mode")
 	rootCmd.Flags().String("name", "", "Plugin name")
 	rootCmd.Flags().String("package", "", "Package name")
+	rootCmd.Flags().String("config", "", "Path to config file")
 }
 
 // Execute adds all child commands to the root command and sets flags appropriately.

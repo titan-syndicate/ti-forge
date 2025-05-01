@@ -55,5 +55,5 @@ func Install() error {
 func Scaffold() error {
 	mg.Deps(Build)
 	fmt.Println("Running scaffold command...")
-	return sh.Run("./bin/ti-scaffold", "--dev", "--config", "test_inputs.yaml")
+	return sh.Run("./bin/ti-scaffold", "--dev", "--config", "testdata/scaffold.yaml")
 }
