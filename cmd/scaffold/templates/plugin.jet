@@ -1,0 +1,36 @@
+package main
+
+import (
+	"log"
+	"os"
+
+	"github.com/hashicorp/go-plugin"
+	"google.golang.org/grpc"
+
+	"{{.Package}}"
+)
+
+func main() {
+	log.SetPrefix("[PLUGIN] ")
+	log.SetFlags(log.LstdFlags | log.Lshortfile)
+
+	log.Println("Starting plugin...")
+
+	// Create the plugin map
+	pluginMap := map[string]plugin.Plugin{
+		"plugin": &{{.Package}}.GRPCPlugin{},
+	}
+
+	// Serve the plugin
+	plugin.Serve(&plugin.ServeConfig{
+		HandshakeConfig: plugin.HandshakeConfig{
+			ProtocolVersion:  1,
+			MagicCookieKey:   "TITANIUM_PLUGIN",
+			MagicCookieValue: "titanium",
+		},
+		Plugins:    pluginMap,
+		GRPCServer: plugin.DefaultGRPCServer,
+	})
+
+	os.Exit(0)
+}
