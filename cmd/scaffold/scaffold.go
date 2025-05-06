@@ -119,10 +119,11 @@ func init() {
 }
 
 // Execute adds all child commands to the root command and sets flags appropriately.
-func Execute() {
+func Execute() error {
 	log.Println("Executing scaffold command...")
 	if err := rootCmd.Execute(); err != nil {
 		log.Printf("Error executing command: %v", err)
-		os.Exit(1)
+		return err
 	}
+	return nil
 }

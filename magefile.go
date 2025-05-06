@@ -44,13 +44,6 @@ func Clean() error {
 	return nil
 }
 
-// Install installs the plugin
-func Install() error {
-	mg.Deps(Build)
-	fmt.Println("Installing plugin...")
-	return sh.Run("cp", "bin/ti-scaffold", "/usr/local/bin/")
-}
-
 // Scaffold runs the scaffold command with test inputs
 func Scaffold() error {
 	mg.Deps(Build)

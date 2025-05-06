@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"log"
 	"os"
 
@@ -55,7 +56,11 @@ func (s *pluginServer) Execute(ctx context.Context, req *pluginapi.ExecuteReques
 	os.Args = append([]string{"ti-scaffold"}, req.Args...)
 
 	// Execute the Cobra command
-	scaffold.Execute()
+	if err := scaffold.Execute(); err != nil {
+		return &pluginapi.ExecuteResponse{
+			Result: fmt.Sprintf("Error executing plugin: %v", err),
+		}, nil
+	}
 
 	return &pluginapi.ExecuteResponse{
 		Result: "Plugin executed successfully",
@@ -111,7 +116,10 @@ func main() {
 		log.Println("Running in development mode...")
 		// Remove the --dev flag from args
 		os.Args = append(os.Args[:1], os.Args[2:]...)
-		scaffold.Execute()
+		if err := scaffold.Execute(); err != nil {
+			log.Printf("Error executing command: %v", err)
+			os.Exit(1)
+		}
 		return
 	}
 
