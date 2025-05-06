@@ -50,3 +50,20 @@ func Scaffold() error {
 	fmt.Println("Running scaffold command...")
 	return sh.Run("./bin/ti-scaffold", "--dev", "--config", "testdata/scaffold.yaml")
 }
+
+// Install builds and installs the plugin
+func Reinstall() error {
+	mg.Deps(Build)
+
+	// Uninstall all existing plugins
+	if err := sh.Run("ti", "plugin", "uninstall-all"); err != nil {
+		return fmt.Errorf("failed to uninstall plugins: %v", err)
+	}
+
+	// Install the new plugin
+	if err := sh.Run("ti", "plugin", "install", "./bin/ti-scaffold"); err != nil {
+		return fmt.Errorf("failed to install plugin: %v", err)
+	}
+
+	return nil
+}
