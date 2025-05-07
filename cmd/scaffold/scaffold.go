@@ -10,7 +10,7 @@ import (
 	"github.com/CloudyKit/jet/v6"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
-	"github.com/titan-syndicate/ti-scaffold/internal/logger"
+	"github.com/titan-syndicate/titanium-plugin-sdk/pkg/logger"
 )
 
 //go:embed templates
@@ -161,7 +161,10 @@ func Execute() error {
 	logLevel, _ := rootCmd.PersistentFlags().GetString("log-level")
 
 	// Initialize logger if not already initialized
-	if err := logger.Init(logLevel); err != nil {
+	if err := logger.Init(logger.Config{
+		Level:      logLevel,
+		PluginName: "ti-scaffold",
+	}); err != nil {
 		return fmt.Errorf("error initializing logger: %v", err)
 	}
 	defer logger.Sync()
