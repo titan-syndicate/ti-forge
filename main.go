@@ -6,11 +6,11 @@ import (
 	"os"
 
 	"github.com/hashicorp/go-plugin"
-	"github.com/titan-syndicate/titanium-plugin-api/pkg/pluginapi"
+	"github.com/titan-syndicate/titanium-plugin-sdk/pkg/logger"
+	"github.com/titan-syndicate/titanium-plugin-sdk/pkg/pluginapi"
 	"google.golang.org/grpc"
 
 	"github.com/titan-syndicate/ti-scaffold/cmd/scaffold"
-	"github.com/titan-syndicate/ti-scaffold/internal/logger"
 )
 
 // GRPCPlugin is the gRPC implementation of the plugin
@@ -116,7 +116,10 @@ func (c *pluginClient) Execute(args []string) (string, error) {
 
 func main() {
 	// Initialize logger with default level
-	if err := logger.Init("info"); err != nil {
+	if err := logger.Init(logger.Config{
+		Level:      "info",
+		PluginName: "ti-scaffold",
+	}); err != nil {
 		fmt.Fprintf(os.Stderr, "Error initializing logger: %v\n", err)
 		os.Exit(1)
 	}
