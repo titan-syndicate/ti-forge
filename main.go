@@ -6,7 +6,7 @@ import (
 	"os"
 
 	"github.com/hashicorp/go-plugin"
-	"github.com/titan-syndicate/titanium-plugin-api/pkg/pluginapi"
+	"github.com/titan-syndicate/titanium-plugin-sdk/pkg/pluginapi"
 	"google.golang.org/grpc"
 
 	"github.com/titan-syndicate/ti-scaffold/cmd/scaffold"
